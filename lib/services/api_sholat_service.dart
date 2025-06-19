@@ -1,0 +1,26 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
+class SholatService {
+  static Future<Map<String, dynamic>> fetchJadwal() async {
+    final now = DateTime.now();
+    final String tanggal = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+
+    final response = await http.get(
+      Uri.parse("https://api.myquran.com/v2/sholat/jadwal/1619/$tanggal"),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      if (jsonData['status'] == true) {
+        return jsonData['data']; // <== INI PENTING!
+      } else {
+        throw Exception('Status false dari API');
+      }
+    } else {
+      print('Status Code: ${response.statusCode}');
+      throw Exception('Gagal mengambil data jadwal');
+    }
+  }
+}
