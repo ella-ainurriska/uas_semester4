@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_sholat_service.dart';
+import 'dart:async';
 
 
 class HomeScreen extends StatefulWidget {
@@ -14,26 +15,35 @@ Map<String, dynamic>? jadwal;
 bool isLoading = true;
 bool isError = false;
 
+
+
+String _currentTime = '';
+late Timer _timer;
+
+void _getCurrentTime() {
+  final now = DateTime.now();
+  setState(() {
+    _currentTime =
+        "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
+  });
+}
+
+void _startTimer() {
+  _timer = Timer.periodic(Duration(seconds: 1), (_) => _getCurrentTime());
+}
+
 @override
 void initState() {
   super.initState();
+  _getCurrentTime();
+  _startTimer();
   getJadwal();
 }
 
-Future<void> getJadwal() async {
-  try {
-    final data = await SholatService.fetchJadwal();
-    setState(() {
-      jadwal = data;
-      isLoading = false;
-      isError = false;
-    });
-  } catch (e) {
-    setState(() {
-      isLoading = false;
-      isError = true;
-    });
-  }
+@override
+void dispose() {
+  _timer.cancel();
+  super.dispose();
 }
 
 
