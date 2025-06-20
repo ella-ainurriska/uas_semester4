@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'quran_screen.dart';
 
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -71,17 +72,9 @@ void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
-  } else if (index == 1) {
-    // Quran
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => QuranScreen()),
-    );
-    setState(() {
-      _selectedIndex = 0; // kembali ke home setelah balik
-    });
   } 
 }
+
 
   @override
 Widget build(BuildContext context) {
@@ -177,22 +170,45 @@ Widget build(BuildContext context) {
                   ),
                 ],
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => QuranScreen()),
-                  );
-                },
-                backgroundColor: Color(0xFF1ABC9C),
-                child: Icon(
-                  PhosphorIcons.bookOpenText(PhosphorIconsStyle.bold),
-                  color: Colors.white,
-                  size: 32,
+              floatingActionButton: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => QuranScreen()),
+                );
+              },
+              child: Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: Color(0xFF1ABC9C),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 15,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
                 ),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                elevation: 4,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      PhosphorIcons.bookOpenText(PhosphorIconsStyle.bold),
+                      color: Colors.white,
+                      size: 26,
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      'Qur\'an',
+                      style: TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  ],
+                ),
               ),
+            ),
+
               floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
               bottomNavigationBar: BottomAppBar(
               shape: CircularNotchedRectangle(),
@@ -212,8 +228,7 @@ Widget build(BuildContext context) {
                     BottomNavigationBarItem(
                       icon: Icon(PhosphorIcons.house()),
                       label: 'Home',
-                    ),
-                    
+                    ),      
                   ],
                 ),
               ),
