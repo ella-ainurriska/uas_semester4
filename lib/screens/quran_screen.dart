@@ -61,17 +61,20 @@ class _QuranScreenState extends State<QuranScreen> {
   }
 }
 
- @override
+@override
 Widget build(BuildContext context) {
   return DefaultTabController(
     length: _surahList.length,
     child: Scaffold(
       appBar: AppBar(
         title: Text("Al-Qur'an"),
+        backgroundColor: Color(0xFF1ABC9C),
+        foregroundColor: Colors.white,
         bottom: isLoading || isError
             ? null
             : TabBar(
                 isScrollable: true,
+                indicatorColor: Colors.white,
                 tabs: _surahList
                     .map((surah) => Tab(text: surah.namaLatin))
                     .toList(),
@@ -82,10 +85,49 @@ Widget build(BuildContext context) {
           : isError
               ? Center(child: Text("Gagal memuat data."))
               : TabBarView(
-                  children:
-                      _surahList.map((_) => Center(child: Text("..."))).toList(),
-                 ),
+                  children: _surahList.map((surah) {
+                    return FutureBuilder<List<Ayat>>(
+                      future: fetchAyat(surah.nomor),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text('Gagal memuat ayat'));
+                        } else {
+                          final ayatList = snapshot.data!;
+                          return ListView.builder(
+                            padding: EdgeInsets.all(16),
+                            itemCount: ayatList.length,
+                            itemBuilder: (context, index) {
+                              final ayat = ayatList[index];
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${ayat.ar}",
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    "${ayat.idn}", // ✅ Ganti 'idn' dengan 'id'
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  Divider(),
+                                ],
+                              );
+                            },
+                          );
+
+                        }
+                      },
+                    );
+                  }).toList(),
+                ),
               ),
             );
           }
-        }
+      }
