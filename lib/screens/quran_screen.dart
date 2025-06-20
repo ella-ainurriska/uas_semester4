@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:coba3/models/surah_model.dart';
+import 'package:coba3/models/ayat_model.dart';
 
 class QuranScreen extends StatefulWidget {
   const QuranScreen({super.key});
@@ -46,6 +47,19 @@ class _QuranScreenState extends State<QuranScreen> {
       });
     }
   }
+
+  Future<List<Ayat>> fetchAyat(int nomorSurah) async {
+  final url = 'https://equran.id/api/surat/$nomorSurah';
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    final List ayatJson = jsonData['ayat'];
+    return ayatJson.map((item) => Ayat.fromJson(item)).toList();
+  } else {
+    throw Exception('Gagal memuat ayat');
+  }
+}
 
  @override
 Widget build(BuildContext context) {
