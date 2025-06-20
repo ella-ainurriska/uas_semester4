@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/api_sholat_service.dart';
 import 'dart:async';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-
+import 'quran_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -71,7 +71,16 @@ void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
-  } 
+  } else if (index == 1) {
+    // Akun
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => QuranScreen()),
+    );
+    setState(() {
+      _selectedIndex = 0; // Kembali ke Home
+    });
+  }
 }
 
 
@@ -166,6 +175,10 @@ void _onItemTapped(int index) async {
                   BottomNavigationBarItem(
                     icon: Icon(PhosphorIcons.house()),
                     label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                  icon: Icon(PhosphorIcons.bookOpenText()),
+                  label: 'Quran',
                   ),
                 ],
               ),
