@@ -67,76 +67,87 @@ class _HomeScreenState extends State<HomeScreen> {
 
 void _onItemTapped(int index) async {
   if (index == 0) {
-    // Home, tidak perlu navigasi
+    // Home
     setState(() {
       _selectedIndex = index;
     });
   } else if (index == 1) {
-    // Akun
+    // Quran
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => QuranScreen()),
     );
     setState(() {
-      _selectedIndex = 0; // Kembali ke Home
+      _selectedIndex = 0; // kembali ke home setelah balik
     });
-  }
+  } 
 }
 
-
   @override
-  Widget build(BuildContext context) {
-    final halfHeight = MediaQuery.of(context).size.height * 0.5;
+Widget build(BuildContext context) {
+  final halfHeight = MediaQuery.of(context).size.height * 0.5;
 
-    return Scaffold(
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : isError
-              ? Center(child: Text('Gagal memuat jadwal sholat.'))
-              : Stack(
-                  children: [
-                    Container(
-                      height: halfHeight,
-                      color: Color(0xFF1ABC9C),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+  return Scaffold(
+    body: isLoading
+        ? Center(child: CircularProgressIndicator())
+        : isError
+            ? Center(child: Text('Gagal memuat jadwal sholat.'))
+            : Stack(
+                children: [
+                  Container(
+                    height: halfHeight,
+                    color: Color(0xFF1ABC9C),
+                  ),
+                  SafeArea(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.only(bottom: 100),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 50),
-                          Text(
-                            "Tanggal: ${jadwal!['jadwal']['tanggal']}",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "Lokasi: ${jadwal!['lokasi']}",
-                            style:
-                                TextStyle(color: Colors.white70, fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 150),
-                          Text(
-                            _currentTime,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(height: 30),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Tanggal: ${jadwal!['jadwal']['tanggal']}",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  "Lokasi: ${jadwal!['lokasi']}",
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 14),
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            "Waktu sekarang",
-                            style: TextStyle(color: Colors.white70),
+                          SizedBox(height: 60),
+                          Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  _currentTime,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "Waktu sekarang",
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(height: 30),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20),
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -159,31 +170,58 @@ void _onItemTapped(int index) async {
                               ),
                             ),
                           ),
-                          SizedBox(height: 40),
-                          
+                          SizedBox(height: 80),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: _selectedIndex,
-                onTap: _onItemTapped,
-                selectedItemColor: Color(0xFF1ABC9C),
-                unselectedItemColor: Colors.grey,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(PhosphorIcons.house()),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                  icon: Icon(PhosphorIcons.bookOpenText()),
-                  label: 'Quran',
                   ),
                 ],
               ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => QuranScreen()),
+                  );
+                },
+                backgroundColor: Color(0xFF1ABC9C),
+                child: Icon(
+                  PhosphorIcons.bookOpenText(PhosphorIconsStyle.bold),
+                  color: Colors.white,
+                  size: 32,
+                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                elevation: 4,
+              ),
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              bottomNavigationBar: BottomAppBar(
+              shape: CircularNotchedRectangle(),
+              notchMargin: 8.0,
+              elevation: 8, // tambahkan ini agar ada bayangan
+              child: SizedBox(
+                height: 60, // atur tinggi agar tidak overflow
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed, // ini penting!
+                  currentIndex: _selectedIndex,
+                  onTap: _onItemTapped,
+                  selectedItemColor: Colors.grey,
+                  unselectedItemColor: Colors.grey,
+                  selectedLabelStyle: TextStyle(fontSize: 12),
+                  unselectedLabelStyle: TextStyle(fontSize: 10),
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(PhosphorIcons.house()),
+                      label: 'Home',
+                    ),
+                    
+                  ],
+                ),
+              ),
+            ),
+
             );
           }
+
 
   Widget _buildWaktuTile(String label, String waktu, PhosphorIconData icon) {
     return Column(
