@@ -125,25 +125,71 @@ void _onItemTapped(int index) async {
                             "Waktu sekarang",
                             style: TextStyle(color: Colors.white70),
                           ),
-                         
+                          SizedBox(height: 30),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  _buildWaktuTile('Subuh',
+                                      jadwal!['jadwal']['subuh'], PhosphorIcons.sunHorizon()),
+                                  SizedBox(width: 25),
+                                  _buildWaktuTile('Dzuhur',
+                                      jadwal!['jadwal']['dzuhur'], PhosphorIcons.sun()),
+                                  SizedBox(width: 25),
+                                  _buildWaktuTile('Ashar',
+                                      jadwal!['jadwal']['ashar'], PhosphorIcons.cloudSun()),
+                                  SizedBox(width: 25),
+                                  _buildWaktuTile('Maghrib',
+                                      jadwal!['jadwal']['maghrib'], PhosphorIcons.mountains()),
+                                  SizedBox(width: 25),
+                                  _buildWaktuTile('Isya',
+                                      jadwal!['jadwal']['isya'], PhosphorIcons.moon()),
+                                ],
+                              ),
+                            ),
+                          ),
                           SizedBox(height: 40),
+                          
                         ],
                       ),
                     ),
                   ],
                 ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Color(0xFF1ABC9C),
-        unselectedItemColor: Colors.grey,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(PhosphorIcons.house()),
-            label: 'Home',
-          ),
-        ],
-      ),
+              bottomNavigationBar: BottomNavigationBar(
+                currentIndex: _selectedIndex,
+                onTap: _onItemTapped,
+                selectedItemColor: Color(0xFF1ABC9C),
+                unselectedItemColor: Colors.grey,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(PhosphorIcons.house()),
+                    label: 'Home',
+                  ),
+                ],
+              ),
+            );
+          }
+
+  Widget _buildWaktuTile(String label, String waktu, PhosphorIconData icon) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style:
+              TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),
+        ),
+        SizedBox(height: 8),
+        Icon(icon, color: Colors.white, size: 20),
+        SizedBox(height: 15),
+        Text(
+          waktu,
+          style: TextStyle(color: Colors.white),
+        ),
+      ],
     );
   }
+
+  
 }
