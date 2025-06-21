@@ -1,8 +1,8 @@
-// quran_screen.dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:coba3/models/surah_model.dart';
+import 'surah_detail.dart';
 import 'package:coba3/models/ayat_model.dart';
 
 class QuranScreen extends StatefulWidget {
@@ -14,6 +14,7 @@ class QuranScreen extends StatefulWidget {
 
 class _QuranScreenState extends State<QuranScreen> {
   List<Surah> _surahList = [];
+  // late TabController _tabController;
   bool isLoading = true;
   bool isError = false;
 
@@ -24,44 +25,66 @@ class _QuranScreenState extends State<QuranScreen> {
   }
 
   Future<void> fetchSurah() async {
-    final url = Uri.parse('https://api.myquran.com/v2/quran/surat/semua');
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        final List<dynamic> data = jsonData['data'];
-        final List<Surah> surahList =
-            data.map((json) => Surah.fromJson(json)).toList();
+  final url = Uri.parse('https://api.myquran.com/v2/quran/surat/semua');
 
-        setState(() {
-          _surahList = surahList;
-          isLoading = false;
-        });
-      } else {
-        throw Exception('Gagal fetch data: ${response.body}');
+  try {
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      final List<dynamic> data = jsonData['data'];
+
+      // Convert List<dynamic> ke List<Surah>
+      final List<Surah> surahList = data.map((json) => Surah.fromJson(json)).toList();
+
+      print("Jumlah surah: ${surahList.length}");
+      for (var s in surahList.take(5)) {
+        print("${s.nomor}: ${s.namaLatin} - ${s.jumlahAyat} ayat");
       }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        isError = true;
-      });
-    }
-  }
+      print("Contoh JSON item pertama:");
+      print(json.encode(data[0]));
 
-  Future<List<Ayat>> fetchAyat(int nomorSurah) async {
+      setState(() {
+        _surahList = surahList;
+        isLoading = false;
+      });
+    } else {
+      throw Exception('Gagal fetch data: ${response.body}');
+    }
+  } catch (e) {
+    print("Error saat fetchSurah: $e");
+    setState(() {
+      isLoading = false;
+      isError = true;
+    });
+  }
+}
+
+Future<List<Ayat>> fetchAyat(int nomorSurah) async {
   final url = 'https://equran.id/api/surat/$nomorSurah';
+  print("Request URL: $url");
+
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
     final jsonData = json.decode(response.body);
-    final List ayatJson = jsonData['ayat'];
+    print("FULL RESPONSE: $jsonData");
+
+    final List ayatJson = jsonData['ayat']; 
+    print("Jumlah ayat: ${ayatJson.length}");
+
     return ayatJson.map((item) => Ayat.fromJson(item)).toList();
   } else {
+    print("Gagal fetch: ${response.statusCode}");
     throw Exception('Gagal memuat ayat');
   }
 }
 
-@override
+
+
+
+
+  @override
 Widget build(BuildContext context) {
   return DefaultTabController(
     length: _surahList.length,
@@ -127,7 +150,8 @@ Widget build(BuildContext context) {
                     );
                   }).toList(),
                 ),
-              ),
-            );
-          }
-      }
+    ),
+  );
+}
+
+}
