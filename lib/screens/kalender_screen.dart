@@ -31,6 +31,19 @@ class MonthCalendar extends StatelessWidget {
 
   const MonthCalendar({required this.year, required this.month});
 
+  const List<String> namaHari = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+  dayWidgets.addAll(namaHari.map((hari) {
+  return Container(
+    alignment: Alignment.center,
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Text(
+      hari,
+      style: const TextStyle(fontWeight: FontWeight.bold),
+    ),
+  );
+}));
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
