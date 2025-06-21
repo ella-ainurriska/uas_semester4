@@ -3,6 +3,7 @@ import '../services/api_sholat_service.dart';
 import 'dart:async';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'quran_screen.dart';
+import 'kalender_screen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 
@@ -73,7 +74,16 @@ void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
-  } 
+  } else if (index == 1) {
+    // Kalender
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => KalenderScreen()),
+    );
+    setState(() {
+      _selectedIndex = 0; // kembali ke Home
+    });
+  }
 }
 
 
@@ -304,9 +314,9 @@ Widget build(BuildContext context) {
               bottomNavigationBar: BottomAppBar(
               shape: CircularNotchedRectangle(),
               notchMargin: 8.0,
-              elevation: 8, // tambahkan ini agar ada bayangan
+              elevation: 8, 
               child: SizedBox(
-                height: 60, // atur tinggi agar tidak overflow
+                height: 60, 
                 child: BottomNavigationBar(
                   type: BottomNavigationBarType.fixed, 
                   currentIndex: _selectedIndex,
@@ -316,7 +326,11 @@ Widget build(BuildContext context) {
                   selectedLabelStyle: TextStyle(fontSize: 12),
                   unselectedLabelStyle: TextStyle(fontSize: 10),
                   items: [
-                       BottomNavigationBarItem(
+                    BottomNavigationBarItem(
+                      icon: Icon(PhosphorIcons.house()),
+                      label: 'Home',
+                    ),
+                    BottomNavigationBarItem(
                       icon: Icon(PhosphorIcons.calendarBlank()),
                       label: 'Kalender',
                     ),
@@ -347,6 +361,4 @@ Widget build(BuildContext context) {
       ],
     );
   }
-
-  
 }
