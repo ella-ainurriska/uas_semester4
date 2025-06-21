@@ -107,10 +107,10 @@ Widget build(BuildContext context) {
                   left: 0,
                   right: 0,
                   child: Opacity(
-                    opacity: 0.2, // atur transparansi (0.0 - 1.0)
+                    opacity: 0.2, 
                     child: ColorFiltered(
                       colorFilter: ColorFilter.mode(
-                        Colors.white.withOpacity(0.2), // campur dengan warna terang
+                        Colors.white.withOpacity(0.2), 
                         BlendMode.srcATop,
                       ),
                       child: Image.asset(
@@ -314,11 +314,11 @@ Widget build(BuildContext context) {
               bottomNavigationBar: BottomAppBar(
               shape: CircularNotchedRectangle(),
               notchMargin: 8.0,
-              elevation: 8, 
+              elevation: 8, // tambahkan ini agar ada bayangan
               child: SizedBox(
-                height: 60, 
+                height: 60, // atur tinggi agar tidak overflow
                 child: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed, 
+                  type: BottomNavigationBarType.fixed, // ini penting!
                   currentIndex: _selectedIndex,
                   onTap: _onItemTapped,
                   selectedItemColor: Colors.grey,
@@ -361,4 +361,6 @@ Widget build(BuildContext context) {
       ],
     );
   }
+
+  
 }
