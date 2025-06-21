@@ -3,6 +3,7 @@ import '../services/api_sholat_service.dart';
 import 'dart:async';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'quran_screen.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -91,6 +92,26 @@ Widget build(BuildContext context) {
                     height: halfHeight,
                     color: Color(0xFF1ABC9C),
                   ),
+                  Positioned(
+                  bottom: halfHeight - 80,
+                  left: 0,
+                  right: 0,
+                  child: Opacity(
+                    opacity: 0.2, // atur transparansi (0.0 - 1.0)
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        Colors.white.withOpacity(0.2), // campur dengan warna terang
+                        BlendMode.srcATop,
+                      ),
+                      child: Image.asset(
+                        'assets/images/baground.png',
+                        fit: BoxFit.cover,
+                        height: 130,
+                      ),
+                    ),
+                  ),
+                ),
+
                   SafeArea(
                     child: SingleChildScrollView(
                       padding: EdgeInsets.only(bottom: 100),
@@ -163,7 +184,77 @@ Widget build(BuildContext context) {
                               ),
                             ),
                           ),
-                          SizedBox(height: 80),
+                          SizedBox(height: 30),
+                       Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Ngaji online",
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 12),
+
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  {
+                                    'title': 'Ngaji Subuh Ust. Adi Hidayat',
+                                    'url': 'https://youtu.be/r5DHnodVqz8?si=POun4lhIBQ_V9hL1',
+                                  },
+                                  {
+                                    'title': 'Kajian Islam Ust. Hanan Attaki',
+                                    'url': 'https://youtu.be/sX-kePnlgy4?si=YN2AbFqduL8t0vlE',
+                                  },
+                                  {
+                                    'title': 'Ngaji Kitab Kuning KH. Bahauddin Nursalim',
+                                    'url': 'https://youtu.be/10bxaEeU2C4?si=fJEbItOEiMXW_vom',
+                                  },
+                                  {
+                                    'title': 'Ngaji Malam KH. Zainuddin MZ',
+                                    'url': 'https://youtu.be/YzV3GBb_1IM?si=IW8e9fJsk2QoHIrF',
+                                  },
+                                ].map((video) {
+                                  final videoId = YoutubePlayer.convertUrlToId(video['url']!);
+                                  if (videoId == null) return SizedBox.shrink();
+
+                                  return Container(
+                                    width: 300,
+                                    margin: EdgeInsets.only(right: 16),
+                                    child: Column(
+                                      children: [
+                                        YoutubePlayer(
+                                          controller: YoutubePlayerController(
+                                            initialVideoId: videoId,
+                                            flags: YoutubePlayerFlags(
+                                              autoPlay: false,
+                                              mute: false,
+                                            ),
+                                          ),
+                                          showVideoProgressIndicator: true,
+                                          progressIndicatorColor: Color(0xFF1ABC9C),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          video['title']!,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+
+
                         ],
                       ),
                     ),
@@ -217,7 +308,7 @@ Widget build(BuildContext context) {
               child: SizedBox(
                 height: 60, // atur tinggi agar tidak overflow
                 child: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed, // ini penting!
+                  type: BottomNavigationBarType.fixed, 
                   currentIndex: _selectedIndex,
                   onTap: _onItemTapped,
                   selectedItemColor: Colors.grey,
@@ -225,10 +316,10 @@ Widget build(BuildContext context) {
                   selectedLabelStyle: TextStyle(fontSize: 12),
                   unselectedLabelStyle: TextStyle(fontSize: 10),
                   items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(PhosphorIcons.house()),
-                      label: 'Home',
-                    ),      
+                       BottomNavigationBarItem(
+                      icon: Icon(PhosphorIcons.calendarBlank()),
+                      label: 'Kalender',
+                    ),
                   ],
                 ),
               ),
