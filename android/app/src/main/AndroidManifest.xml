@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:label="coba3"
+        android:label="NGAJI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
@@ -12,7 +12,7 @@
 
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.ngaji.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:taskAffinity=""
